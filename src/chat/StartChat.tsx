@@ -2,15 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import useSocket from "./useSockets";
 import { Message } from "./types";
 import ChatWindow from "./ChatWindow";
+import { useEffect, useRef, useState } from "react";
+import useSocket from "./useSockets";
+import { Message } from "./types";
+import ChatWindow from "./ChatWindow";
 
 export default function StartChat() {
   // dummy data
   const [messages, setMessages] = useState<Message[]>([]);
 
-  // websocket connected with backend?
+  // WebSocket connection status
   const [isWSReady, setIsWSReady] = useState(false);
-
-  // error while connecting with websocket?
   const [wsError, setWsError] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,7 +24,8 @@ export default function StartChat() {
   // getting instance of websockets
   const { wsInstance } = useSocket(url, setIsWSReady, setWsError);
 
-  const messageListenerRef = useRef<(e: MessageEvent) => void | null>(null);
+  // Reference to manage the active listener
+  const activeMessageListener = useRef<(e: MessageEvent) => void>();
 
   useEffect(() => {
     if (!wsError && isWSReady) {
@@ -31,12 +34,12 @@ export default function StartChat() {
   }, [wsError, isWSReady]);
 
   const addMessage = (message: Message) => {
-    setMessages((messages) => [...messages, message]);
+    setMessages((prevMessages) => [...prevMessages, message]);
   };
 
-  // sending messages to backend
   const sendMessage = async (message: string, selectedBot: string) => {
     if (loading) return;
+
     setLoading(true);
     setIsStreaming(true);
 
@@ -92,18 +95,21 @@ export default function StartChat() {
       console.log("Formatted Response added to messages:", formattedResponse);
     };
 
-    messageListenerRef.current = zeloMessage;
+    // Assign the new listener function
+    activeMessageListener.current = zeloMessage;
 
     const getResponse = async () => {
+      addMessage({ content: "", role: "zelo", bot: selectedBot });
       addMessage({ content: "", role: "zelo", bot: selectedBot });
 
       // event triggers when backend send a message to frontend
       wsInstance?.addEventListener("message", zeloMessage);
     };
+
     try {
       await getResponse();
-    } catch {
-      // error
+    } catch (error) {
+      console.error("Error fetching response:", error);
     } finally {
       setIsStreaming(false);
       setLoading(false);
@@ -111,7 +117,7 @@ export default function StartChat() {
   };
 
   return (
-    <div className="flex  h-screen flex-col items-center justify-around w-full z-10">
+    <div className="flex h-screen flex-col items-center justify-around w-full z-10">
       <ChatWindow
         loading={loading}
         messages={messages}
