@@ -12,13 +12,6 @@ export default function SearchBar({
 }) {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
-  // dummy bot data
-  const [bots, setBots] = useState([
-    { img: "/new/bot/bot1.svg", name: "ZSteve" },
-    { img: "/new/bot/bot2.svg", name: "ZSalesCoach" },
-    { img: "/new/bot/bot3.svg", name: "Z" },
-    { img: "/new/bot/bot4.svg", name: "Z" },
-  ]);
 
   const [selectedBot, setSelectedBot] = useState<string>("");
   const [message, setMessage] = useState("");

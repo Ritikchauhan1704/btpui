@@ -2,10 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import useSocket from "./useSockets";
 import { Message } from "./types";
 import ChatWindow from "./ChatWindow";
-import { useEffect, useRef, useState } from "react";
-import useSocket from "./useSockets";
-import { Message } from "./types";
-import ChatWindow from "./ChatWindow";
 
 export default function StartChat() {
   // dummy data
@@ -53,8 +49,8 @@ export default function StartChat() {
     );
 
     // Remove the previous event listener if it exists
-    if (messageListenerRef.current) {
-      wsInstance?.removeEventListener("message", messageListenerRef.current);
+    if (activeMessageListener.current) {
+      wsInstance?.removeEventListener("message", activeMessageListener.current);
     }
 
     const zeloMessage = (e: MessageEvent) => {
@@ -99,7 +95,6 @@ export default function StartChat() {
     activeMessageListener.current = zeloMessage;
 
     const getResponse = async () => {
-      addMessage({ content: "", role: "zelo", bot: selectedBot });
       addMessage({ content: "", role: "zelo", bot: selectedBot });
 
       // event triggers when backend send a message to frontend

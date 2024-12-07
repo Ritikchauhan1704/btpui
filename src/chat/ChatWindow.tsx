@@ -11,7 +11,6 @@ export default function ChatWindow({
   loading: boolean;
   messages: Message[];
   sendMessage: (message: string, selectedBot: string) => void;
-  sendMessage: (message: string, selectedBot: string) => void;
 }) {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 

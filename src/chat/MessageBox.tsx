@@ -1,7 +1,4 @@
 import { Message } from './types';
-import React from 'react';
-import Markdown from 'react-markdown';
-
 export default function MessageBox({
   message,
 }: {
@@ -29,10 +26,7 @@ export default function MessageBox({
         <div className="flex flex-col w-full items-start">
           <div className="flex">
             <div className="w-full text-sm">
-              {/* <Markdown> */}
                 {message.content}
-                
-              {/* </Markdown> */}
             </div>
           </div>
         </div>
