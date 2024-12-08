@@ -54,29 +54,9 @@ export default function SearchBar({
 
   return (
     <>
-      {!hasEnteredPrompt && (
-        <div className="flex flex-col items-center justify-center w-full bg-blue-50 py-12">
-          <div className="text-center mb-8">
-            <h1 className="text-5xl font-extrabold text-gray-800 mb-4">
-              Health LLM
-            </h1>
-            <p className="text-xl text-gray-600">
-              Describe your symptoms, and let us assist with personalized health
-              predictions.
-            </p>
-          </div>
-          <img
-            src={LLM}
-            alt="Health Assistant"
-            className="w-auto h-auto max-w-[400px] mx-auto shadow-md"
-          />
-        </div>
-      )}
 
       <form
-        className={`flex py-2 gap-4 w-full lg:w-[55%] h-16 bg-white border-2 rounded-full justify-center items-center pl-4 pr-2 z-20 ${
-          hasEnteredPrompt ? "hidden" : ""
-        }`}
+        className={`flex py-2 gap-4 w-full lg:w-[55%] h-16 bg-white border-2 rounded-full justify-center items-center pl-4 pr-2 z-20`}
         onSubmit={handleSubmit}
         onKeyDown={(e) => {
           if (

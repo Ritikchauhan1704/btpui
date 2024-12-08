@@ -5,7 +5,10 @@ import ChatWindow from "./ChatWindow";
 
 export default function StartChat() {
   // dummy data
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    // {content:"hi",role:"user",bot:""},
+    // {content:"hi",role:"zelo",bot:""}
+  ]);
 
   // WebSocket connection status
   const [isWSReady, setIsWSReady] = useState(false);
@@ -14,13 +17,9 @@ export default function StartChat() {
   const [loading, setLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
 
-  // backend websocket endpoint
   const url = "ws://127.0.0.1:8000/start";
-
-  // getting instance of websockets
   const { wsInstance } = useSocket(url, setIsWSReady, setWsError);
 
-  // Reference to manage the active listener
   const activeMessageListener = useRef<(e: MessageEvent) => void>();
 
   useEffect(() => {
@@ -48,21 +47,13 @@ export default function StartChat() {
       })
     );
 
-    // Remove the previous event listener if it exists
     if (activeMessageListener.current) {
       wsInstance?.removeEventListener("message", activeMessageListener.current);
     }
 
     const zeloMessage = (e: MessageEvent) => {
-      // e->response from backend
-      // console.log(e.data);
       const data = JSON.parse(e.data).content;
       console.log(data);
-      // console.log(typeof data);
-      // console.log(data['predicted_precautions']);
-      // data=JSON.parse(data)
-
-      // Format the response into readable English
       const formattedResponse = `
         Predicted disease: ${data.predicted_disease || "Not available"}
     
